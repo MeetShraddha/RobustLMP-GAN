@@ -60,7 +60,8 @@ cd robust-lmp
 # Create and activate virtual environment
 ```text
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
+# On Windows: venv\Scripts\activate
 ```
 
 # Install dependencies
@@ -69,12 +70,26 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. Data SetupPlace your PJM/CAISO CSV files in the directory specified in configs/config.yaml (default: data/raw/).📈 UsageRun the Full PipelineThe main.py script orchestrates data processing, GAN training, and robust model training:Bashpython src/robust_lmp/main.py --config configs/config.yaml
-Individual ComponentsYou can also run specific stages via the provided scripts:Train GAN: python scripts/train_gan.pyEvaluate Robustness: python scripts/evaluate.py --model_path models/robust_lstm.pt🐳 Docker SupportTo run the pipeline in a reproducible containerized environment:Bash# Build the image
-docker build -t robust-lmp .
+3. Data SetupPlace your PJM/CAISO CSV files in the directory specified in configs/config.yaml (default: data/raw/).📈 UsageRun the Full PipelineThe main.py script orchestrates data processing, GAN training, and robust model training:Bash
+```text
+python src/robust_lmp/main.py --config configs/config.yaml
+```
+Individual Components
+You can also run specific stages via the provided scripts:
+Train GAN: 
+python scripts/train_gan.py
 
+Evaluate Robustness: 
+python scripts/evaluate.py --model_path models/robust_lstm.pt
+
+🐳 Docker SupportTo run the pipeline in a reproducible containerized environment:```Bash# Build the image```
+```text
+docker build -t robust-lmp .
+```
 # Run the training pipeline
+```text
 docker run -v $(pwd)/data:/app/data robust-lmp
+```
 🧪 TestingRun unit tests to ensure data transformations and model dimensions are correct:Bashpytest tests/
 📝 Configuration (YAML)Modify configs/config.yaml to change behavior without touching code:YAMLmodel:
   lstm_hidden_size: 64
