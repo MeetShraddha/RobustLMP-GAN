@@ -52,19 +52,19 @@ Ensure you have **Python 3.9+** installed. It is highly recommended to use a vir
 
 
 # Clone the repository
-```bash
+```text
 git clone [https://github.com/your-username/robust-lmp.git](https://github.com/your-username/robust-lmp.git)
 cd robust-lmp
 ```
 
 # Create and activate virtual environment
-```bash
+```text
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 # Install dependencies
-```bash
+```text
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
