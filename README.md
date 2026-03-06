@@ -286,9 +286,9 @@ At inference, 64 copies of each input are perturbed with Gaussian noise (σ=0.05
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{robustlmpgan2024,
+@article{robustlmpgan2026,
   title={Certified Defense-Augmented GANs for Day-Ahead LMP Forecasting Under Data Poisoning},
-  year={2024}
+  year={2026}
 }
 ```
 
