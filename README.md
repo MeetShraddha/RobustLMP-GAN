@@ -50,19 +50,24 @@ robust_lmp/
 ### 1. Environment Preparation
 Ensure you have **Python 3.9+** installed. It is highly recommended to use a virtual environment to manage dependencies.
 
-```bash
+
 # Clone the repository
+```bash
 git clone [https://github.com/your-username/robust-lmp.git](https://github.com/your-username/robust-lmp.git)
 cd robust-lmp
+```
 
 # Create and activate virtual environment
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
 # Install dependencies
+```bash
 pip install --upgrade pip
 pip install -r requirements.txt
-
+```
 
 3. Data SetupPlace your PJM/CAISO CSV files in the directory specified in configs/config.yaml (default: data/raw/).📈 UsageRun the Full PipelineThe main.py script orchestrates data processing, GAN training, and robust model training:Bashpython src/robust_lmp/main.py --config configs/config.yaml
 Individual ComponentsYou can also run specific stages via the provided scripts:Train GAN: python scripts/train_gan.pyEvaluate Robustness: python scripts/evaluate.py --model_path models/robust_lstm.pt🐳 Docker SupportTo run the pipeline in a reproducible containerized environment:Bash# Build the image
