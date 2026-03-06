@@ -70,19 +70,30 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. Data SetupPlace your PJM/CAISO CSV files in the directory specified in configs/config.yaml (default: data/raw/).📈 UsageRun the Full PipelineThe main.py script orchestrates data processing, GAN training, and robust model training:Bash
+3. Data Setup
+
+Place your PJM/CAISO CSV files in the directory specified in configs/config.yaml (default: data/raw/).
+
+📈 Usage
+
+Run the Full Pipeline
+The main.py script orchestrates data processing, GAN training, and robust model training:
 ```text
 python src/robust_lmp/main.py --config configs/config.yaml
 ```
 Individual Components
 You can also run specific stages via the provided scripts:
 Train GAN: 
+```text
 python scripts/train_gan.py
-
+```
 Evaluate Robustness: 
+```text
 python scripts/evaluate.py --model_path models/robust_lstm.pt
-
-🐳 Docker SupportTo run the pipeline in a reproducible containerized environment:```Bash# Build the image```
+```
+🐳 Docker Support
+To run the pipeline in a reproducible containerized environment:
+# Build the image
 ```text
 docker build -t robust-lmp .
 ```
