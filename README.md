@@ -101,8 +101,13 @@ docker build -t robust-lmp .
 ```text
 docker run -v $(pwd)/data:/app/data robust-lmp
 ```
-🧪 TestingRun unit tests to ensure data transformations and model dimensions are correct:Bashpytest tests/
-📝 Configuration (YAML)Modify configs/config.yaml to change behavior without touching code:YAMLmodel:
+🧪 Testing
+Run unit tests to ensure data transformations and model dimensions are correct:
+pytest tests/
+
+📝 Configuration (YAML)
+Modify configs/config.yaml to change behavior without touching code:
+YAMLmodel:
   lstm_hidden_size: 64
   batch_size: 32
   learning_rate: 0.001
