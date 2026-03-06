@@ -43,6 +43,8 @@ robust_lmp/
 ├── Dockerfile                # Containerization for reproducibility
 └── requirements.txt          # Python dependencies
 
+```
+
 ## 🛠️ Installation & Setup
 
 ### 1. Environment Preparation
