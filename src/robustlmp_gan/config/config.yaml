@@ -1,0 +1,128 @@
+
+# ═══════════════════════════════════════════════════════════════
+# RobustLMP-GAN — Master Configuration
+# ═══════════════════════════════════════════════════════════════
+
+project:
+  name: robustlmp_gan
+  seed: 42
+  output_dir: robustlmp_outputs
+
+# ── Data ──────────────────────────────────────────────────────
+data:
+  raw_dir: data/PJM hourly LMP and load data 2019-2023
+  lmp_pattern: "rt_da_monthly_lmps_20*.csv"
+  eia_gas_path: data/eia_natural_gas_prices.xls
+  eia_gas_sheet: "Data 1"
+  eia_gas_skiprows: 2
+  eia_interchange_dir: eia930_interchange
+  noaa_weather_dir: noaa_weather
+
+  # Intermediate outputs
+  top50_csv: pjm_lmp_top50_2019_2023.csv
+  features_csv: pjm_features_engineered.csv
+  weather_features_csv: pjm_features_engineered_weather.csv
+
+  # Filtering
+  date_start: "2019-01-01"
+  date_end: "2024-01-01"
+  node_types: ["ZONE", "HUB"]
+  top_n_nodes: 50
+
+  # Target columns
+  targets: ["total_lmp_rt", "total_lmp_da"]
+
+  # Columns to exclude from feature set
+  exclude_cols:
+    - datetime_beginning_utc
+    - datetime_beginning_ept
+    - pnode_id
+    - pnode_name
+    - type
+    - zone
+    - year_month
+    - total_lmp_rt
+    - total_lmp_da
+
+  # Heat rate for implied gas LMP (MMBtu/MWh — standard CCGT assumption)
+  heat_rate: 7.5
+
+  # Outlier clipping percentiles
+  lmp_clip_low: 0.01
+  lmp_clip_high: 0.99
+
+# ── Feature Engineering ───────────────────────────────────────
+features:
+  lag_hours: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+  seasonal_lags: [48, 72, 168]
+  rolling_windows: [6, 24, 168]
+  peak_hours_start: 7
+  peak_hours_end: 23
+
+# ── Train / Val / Test Split ──────────────────────────────────
+split:
+  train_end: "2023-01-01"
+  val_end: "2023-07-01"
+  # test = val_end to end of data
+
+# ── WGAN-GP ───────────────────────────────────────────────────
+wgan:
+  noise_dim: 32
+  gen_hidden: 64
+  disc_hidden: 64
+  n_critic: 3           # discriminator updates per generator update
+  gp_lambda: 10         # gradient penalty weight
+  gen_lr: 0.0002
+  disc_lr: 0.0002
+  epochs: 30
+  batch_size: 256
+  checkpoint_every: 5   # save checkpoint every N epochs
+
+# ── LSTM Forecaster ───────────────────────────────────────────
+lstm:
+  hidden_size: 64
+  num_layers: 2
+  dropout: 0.2
+  learning_rate: 0.001
+  epochs: 25
+  batch_size: 512
+  seq_len: 24           # 24-hour input window
+  pred_len: 1           # 1-hour ahead forecast
+  scheduler_patience: 3
+  scheduler_factor: 0.5
+  grad_clip: 1.0
+  aug_fraction: 0.3     # fraction of batch to augment
+
+# ── Randomized Smoothing ──────────────────────────────────────
+smoothing:
+  sigma: 0.05           # noise std for smoothing
+  n_samples: 64         # inference samples (CPU-friendly)
+
+# ── Adversarial Attack (PGD) ──────────────────────────────────
+pgd:
+  epsilons: [0.01, 0.05, 0.10]
+  steps: 10
+  alpha: 0.005
+
+# ── EIA API ───────────────────────────────────────────────────
+eia_api:
+  base_url: "https://api.eia.gov/v2/electricity/rto/interchange-data/data/"
+  frequency: hourly
+  from_ba: PJM
+  page_size: 5000
+  sleep_seconds: 0.5
+
+# ── NOAA API ─────────────────────────────────────────────────
+noaa_api:
+  base_url: "https://www.ncdc.noaa.gov/cdo-web/api/v2/data"
+  dataset_id: GHCND
+  datatypes: ["TMAX", "TMIN", "AWND", "PRCP"]
+  page_size: 1000
+  sleep_seconds: 0.3
+  base_temp_celsius: 18.3   # for HDD/CDD calculation
+  stations:
+    Philadelphia:  "GHCND:USW00013739"
+    Pittsburgh:    "GHCND:USW00094823"
+    Chicago:       "GHCND:USW00094846"
+    Columbus_OH:   "GHCND:USW00014821"
+    Washington_DC: "GHCND:USW00013743"
