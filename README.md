@@ -1,5 +1,33 @@
 # RobustLMP-GAN
-RobustLMP: Certified Defense-Augmented GAN for LMP ForecastingRobustLMP is a production-grade framework designed to defend Locational Marginal Price (LMP) forecasting models against adversarial data poisoning. It combines a Wasserstein GAN (WGAN) for robust data augmentation with Randomized Smoothing to provide certifiable $L_2$ robustness guarantees.This project refactors a research-oriented Jupyter notebook into a modular, scalable, and maintainable Python package.🚀 FeaturesModular Pipeline: Clear separation between data engineering, model definition, training, and evaluation.WGAN-Augmented Training: Uses a GAN to generate synthetic "adversarial-like" edge cases to improve model generalization.Certified Robustness: Implements randomized smoothing to guarantee that small perturbations in input features (e.g., manipulated load data) won't drastically flip the price forecast.Configuration-Driven: All hyperparameters, file paths, and model settings are stored in configs/config.yaml.Production Ready: Includes logging, type hinting, unit tests, and Docker support.📂 Project StructurePlaintextrobust_lmp/
+
+# 🛡️ RobustLMP-GAN
+### Certified Defense-Augmented GANs for Day-Ahead LMP Forecasting
+
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Framework: PyTorch](https://img.shields.io/badge/Framework-PyTorch-ee4c2c.svg)](https://pytorch.org/)
+
+**RobustLMP-GAN** is a production-grade forecasting framework designed to protect Locational Marginal Price (LMP) models against *adversarial data poisoning*. By combining **Wasserstein GAN (WGAN)** data augmentation with **Randomized Smoothing**, it provides provable $L_2$ robustness guarantees for energy market price predictions.
+
+---
+
+## 📖 Project Overview
+
+Electricity markets are increasingly vulnerable to "Data Integrity Attacks." A sophisticated actor can subtly corrupt input features (like load forecasts or fuel prices) to bias the market clearing price in their favor. 
+
+**This project addresses this by:**
+* **Augmenting** training data with a WGAN to generate "worst-case" distribution shifts.
+* **Certifying** model outputs using Gaussian noise injection, ensuring the forecast stays within a tight bound even if inputs are perturbed.
+* **Quantifying** risk via a custom **Market Vulnerability Score (MVS)**.
+
+
+
+---
+
+## 📂 Project Structure
+
+```text
+robust_lmp/
 ├── configs/
 │   └── config.yaml           # Centralized experiment parameters
 ├── src/
